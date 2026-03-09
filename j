@@ -1,5 +1,9 @@
+$tcp = New-Object System.Net.Sockets.TcpClient
 1..10000 | % {
-    if (Test-NetConnection -ComputerName localhost -Port $_ -WarningAction SilentlyContinue -InformationLevel Quiet) {
+    try {
+        $tcp.Connect("127.0.0.1", $_)
         "Port $_ is open"
-    }
+        $tcp.Close()
+        $tcp = New-Object System.Net.Sockets.TcpClient
+    } catch {}
 }
